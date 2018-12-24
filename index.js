@@ -7,7 +7,6 @@ function formatQueryParams(params) {
 }
 
 function displayResults(responseJson) {
-  console.log(responseJson);
   $('#results-list').empty();
   for (let i = 0; i < responseJson.length; i++){
     $('#results-list').append(
@@ -20,20 +19,18 @@ function displayResults(responseJson) {
 };
 
 function getRepos(username) {
-  // const baseUrl = `https://api.github.com/users/${username}/repos`;
-  const url = `https://api.github.com/users/${username}/repos`;
+  const baseUrl = `https://api.github.com/users/${username}/repos`;
   const params = {
-    type: all,
-    sort: created,
-    direction: desc,
+    type: 'all',
+    sort: 'created',
+    direction: 'desc',
   };
 
-  // const queryString = formatQueryParams(params)
-  // const fullUrl = baseUrl+'?'+queryString
+  const queryString = formatQueryParams(params)
+  const fullUrl = baseUrl+'?'+queryString
 
-  console.log(url);
-
-  fetch(url)
+  $('#js-error-message').empty();
+  fetch(fullUrl, params)
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -43,6 +40,7 @@ function getRepos(username) {
     .then(responseJson => displayResults(responseJson))
     .catch(err => {
       $('#js-error-message').text(`Something went wrong: ${err.message}`);
+      $('#results-list').empty();
     });
 }
 
